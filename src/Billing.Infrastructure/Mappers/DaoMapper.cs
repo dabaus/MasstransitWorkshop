@@ -1,3 +1,4 @@
+using Billing.Application.ValueObjects;
 using Billing.Domain.Bussines;
 using Domain.Bussines;
 using Persistence.Dao;
@@ -10,11 +11,11 @@ public class DaoMapper : IDaoMapper
     {
         var order = new Order()
         {
-            OrderId = dao.Id,
-            CurrencyCode = dao.CurrencyCode,
+            OrderId = new OrderId(dao.Id),
+            CurrencyCode = new CurrencyCode(dao.CurrencyCode),
             OrderArticles = dao.Articles.Select(OrderArticleDao2Domain).ToList(),
             OrderNumber = dao.OrderNumber,
-            CustomerId = dao.CustomerId,
+            CustomerId = new CustomerId(dao.CustomerId),
         };
         return order;
     }
@@ -47,11 +48,11 @@ public class DaoMapper : IDaoMapper
     {
         var orderDao = new OrderDao()
         {
-            Id = order.OrderId,
+            Id = order.OrderId.Value,
             OrderNumber = order.OrderNumber,
             Articles = order.OrderArticles.Select(DomainOrderArticle2Dao).ToList(),
-            CurrencyCode = order.CurrencyCode,
-            CustomerId = order.CustomerId
+            CurrencyCode = order.CurrencyCode.Value,
+            CustomerId = order.CustomerId.Value,
         };
         return orderDao;
     }

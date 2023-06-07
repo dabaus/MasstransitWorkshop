@@ -17,9 +17,9 @@ public class DtoMapper : IDtoMapper
     {
         return new OrderDto()
         {
-            CurrencyCode = order.CurrencyCode,
-            CustomerId = order.CustomerId,
-            OrderId = order.OrderId,
+            CurrencyCode = order.CurrencyCode.Value,
+            CustomerId = order.CustomerId.Value,
+            OrderId = order.OrderId.Value,
             OrderNumber = order.OrderNumber,
             OrderArticles = order.OrderArticles.Select(x => OrderArticleToDto(x)).ToList()
         };

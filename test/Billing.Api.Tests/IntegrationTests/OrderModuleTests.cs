@@ -55,11 +55,10 @@ public class OrderModuleTests : IClassFixture<WebApplicationFactory<Billing.Api.
         await _client.PostAsync("/orders",  requestContent);
 
         var result = await _client.GetAsync($"/orders/{orderId}");
-        var ct = await result.Content.ReadAsStringAsync();
-        
-        var content = (await result.Content.ReadFromJsonAsync<FindOrderResponse>(options: _serializerOptions));
 
         // Assert
+        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        var content = (await result.Content.ReadFromJsonAsync<FindOrderResponse>(options: _serializerOptions));
         content.Should().NotBeNull();
         var resultOrder = content!.Order;
         resultOrder.OrderId.Should().Be(orderId);

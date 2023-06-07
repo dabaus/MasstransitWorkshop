@@ -1,5 +1,6 @@
 using Billing.Application.Commands;
 using Billing.Application.Validation;
+using Billing.Application.ValueObjects;
 using Billing.Domain.Bussines;
 using Billing.Domain.CommandHandlers;
 using Billing.Domain.Commands;
@@ -30,8 +31,7 @@ public class CreateOrderCommandHandler : ICreateOrderCommandHandler
                 AlreadyExists = true
             };
         };
-
-        ValidationUtils.ValidateCurrencyCode(command.CurrencyCode);
+        
         var articles = new List<OrderArticle>();
         foreach (var article in command.OrderArticles)
         {
@@ -39,17 +39,20 @@ public class CreateOrderCommandHandler : ICreateOrderCommandHandler
             articles.Add(article);
         }
         
-        var order = Order.Create(command.OrderId)
-            .WithArticles(articles)
-            .WithCustomer(command.CustomerId)
-            .WithCurrency(command.CurrencyCode)
-            .Build();
+        var order = new Order()
+        {
+            OrderId = new OrderId(command.OrderId),
+            CurrencyCode = new CurrencyCode(command.CurrencyCode),
+            OrderArticles = articles,
+            OrderNumber = Order.GenerateOrderNumber(),
+            CustomerId = new CustomerId(command.CustomerId)
+        };
 
         await _writeRepo.Store(order);
 
         return new CreateOrderCommandResult()
         {
-            OrderId = order.OrderId,
+            OrderId = order.OrderId.Value,
             AlreadyExists = false
         };
     }

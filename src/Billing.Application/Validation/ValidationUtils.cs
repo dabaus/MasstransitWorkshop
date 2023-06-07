@@ -4,21 +4,7 @@ namespace Billing.Application.Validation;
 
 public class ValidationUtils
 {
- 
-    public static void ValidateCurrencyCode(string CurrencyCode)
-    {
-        switch (CurrencyCode)
-        {
-            case "SEK":
-                break;
-            case "EUR":
-                break;
-            case "USD":
-                break;
-            default:
-                throw new Exception($"Invalid currency code {CurrencyCode}");
-        }
-    }
+    
 
     public static void ValidateOrderNumber(string OrderNumber)
     {
