@@ -1,5 +1,4 @@
-﻿using Billing.Processing.Consumers;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.Hosting;
 
 public class Program
@@ -19,8 +18,6 @@ public class Program
             {
                 services.AddMassTransit(x =>
                 {
-                    x.AddConsumer<CreateOrderConsumer>();
-                    
                     x.UsingRabbitMq((context, cfg) =>
                     {
                         cfg.Host("localhost", "/", h =>
